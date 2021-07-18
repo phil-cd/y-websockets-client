@@ -36,6 +36,10 @@ function extend (Y) {
 
       this._onConnect = async function joinRoom () {
         socket.emit('joinRoom', options.room, options.authInfo)
+        if (!options.room.startsWith("projects_")) {
+            joined = true
+            self.userJoined('server', 'master')
+        }
       }
 
       socket.on('connect', this._onConnect)
