@@ -7048,10 +7048,13 @@ function extend (Y) {
 
       this._onYjsEvent = function (message) {
         if (message.type != null) {
+          console.log("_onYjsEvent (for client with socket id: " + socket.id + ")")
           if (message.type === 'userJoined called') {
+            console.log("received userJoined message")
             self.userJoined('server', 'master')
           }
           if (message.type === 'sync done') {
+            console.log("received sync done message")
             var userId = socket.id
             if (socket._yjs_connection_counter == null) {
               socket._yjs_connection_counter = 1
@@ -7061,6 +7064,7 @@ function extend (Y) {
             self.setUserId(userId)
           }
           if (message.room === options.room) {
+            console.log("receiveMessage called with message: ", message)
             self.receiveMessage('server', message)
           }
         }
