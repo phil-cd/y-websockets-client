@@ -7035,6 +7035,8 @@ function extend (Y) {
       this.socket = socket
       var self = this
 
+      var joined = false
+
       this._onConnect = async function joinRoom () {
         socket.emit('joinRoom', options.room, options.authInfo)
       }
@@ -7051,7 +7053,10 @@ function extend (Y) {
           console.log("_onYjsEvent (for client with socket id: " + socket.id + ")")
           if (message.type === 'userJoined called') {
             console.log("received userJoined message")
-            self.userJoined('server', 'master')
+            if (!joined) {
+                joined = true
+                self.userJoined('server', 'master')
+            }
           }
           if (message.type === 'sync done') {
             console.log("received sync done message")
@@ -7065,7 +7070,9 @@ function extend (Y) {
           }
           if (message.room === options.room) {
             console.log("receiveMessage called with message: ", message)
-            self.receiveMessage('server', message)
+            if (joined) {
+                self.receiveMessage('server', message)
+            }
           }
         }
       }
